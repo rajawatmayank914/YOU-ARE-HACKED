@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>System Breach</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Consolas, monospace;
+    }
+
+    body {
+      background: black;
+      color: #00ff00;
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    .glitch {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 4rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: red;
+      animation: flicker 0.1s infinite alternate;
+      text-shadow:
+        2px 2px 0 #ff0000,
+        -2px -2px 0 #00ffff;
+      z-index: 10;
+      text-align: center;
+    }
+
+    @keyframes flicker {
+      from {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      to {
+        opacity: 0.85;
+        transform: translate(-50%, -50%) scale(1.02);
+      }
+    }
+
+    .terminal {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      font-size: 1rem;
+      color: #00ff00;
+      width: 90%;
+      line-height: 1.6;
+      white-space: pre-line;
+    }
+
+    .warning {
+      position: absolute;
+      top: 20px;
+      width: 100%;
+      text-align: center;
+      color: red;
+      font-size: 1.5rem;
+      animation: blink 0.5s infinite;
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0;
+      }
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    .scanline {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.02),
+        rgba(255,255,255,0.02) 1px,
+        transparent 2px,
+        transparent 4px
+      );
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrix"></canvas>
+
+  <div class="warning">⚠ SECURITY BREACH DETECTED ⚠</div>
+
+  <div class="glitch">
+    YOU ARE HACKED
+  </div>
+
+  <div class="terminal" id="terminal"></div>
+
+  <div class="scanline"></div>
+
+  <audio autoplay loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_9f1c3f0f9c.mp3?filename=dark-drone-ambience-110997.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    // Matrix rain effect
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const letters = '01ABCDEFGHIJKLMNOPQRSTUVWXYZ$#@%&';
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
+
+    const drops = [];
+    for (let i = 0; i < columns; i++) {
+      drops[i] = 1;
+    }
+
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#00ff00';
+      ctx.font = fontSize + 'px monospace';
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = letters[Math.floor(Math.random() * letters.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+
+        drops[i]++;
+      }
+    }
+
+    setInterval(drawMatrix, 35);
+
+    // Fake hacking terminal
+    const terminal = document.getElementById('terminal');
+
+    const lines = [
+      '[+] Connecting to target device...',
+      '[+] Access granted.',
+      '[+] Downloading private files...',
+      '[+] Camera access enabled.',
+      '[+] Uploading virus payload...',
+      '[!] Firewall disabled.',
+      '[+] Encrypting data...',
+      '[!] Device compromised successfully.'
+    ];
+
+    let index = 0;
+
+    function typeLine() {
+      if (index < lines.length) {
+        terminal.innerHTML += lines[index] + '\n';
+        index++;
+        setTimeout(typeLine, 1200);
+      }
+    }
+
+    typeLine();
+
+    // Random screen shake
+    setInterval(() => {
+      document.body.style.transform = `translate(${Math.random()*6-3}px, ${Math.random()*6-3}px)`;
+    }, 80);
+
+    // Fullscreen popup loop
+    setInterval(() => {
+      alert('WARNING: SYSTEM SECURITY FAILURE');
+    }, 15000);
+  </script>
+</body>
+</html>
